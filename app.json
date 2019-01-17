@@ -1,0 +1,7 @@
+{
+    "name": "Dash Rates Python3 API",
+    "description": "A Python Flask application for running the Dash Rates API.",
+    "website": "https://get-spark.com",
+    "success_url": "/usd",
+    "addons": ["heroku-postgresql:hobby-dev", "heroku-redis:hobby-dev"]
+}
