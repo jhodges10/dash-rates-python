@@ -7,20 +7,6 @@ log = echo "$(now) $(1)"
 install: pip3 install -r requirements.txt
 
 # -- Database --
-migrate:
-	knex migrate:latest
-
-rollback:
-	knex migrate:rollback
-
-seed:
-	knex seed:run
-
-create-migration:
-	knex migrate:make ${NAME}
-
-purge:
-	node src/scripts/purge-database.js
 
 # -- Infra --
 infra:
