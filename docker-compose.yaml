@@ -2,11 +2,14 @@ version: '3.3'
 services:
 
   database:
-    image: sameersbn/postgresql:10
+    image: postgres:latest
     container_name: dash-rates-db
     environment:
-      - DB_NAME=dash-rates-local,dash-rates-test
       - PG_TRUST_LOCALNET=true
+      - POSTGRES_USER=jeff
+      - POSTGRES_PASSWORD=jeff
+      - POSTGRES_DB=dash-rates-local
+
     ports:
       - "5432:5432"
 
