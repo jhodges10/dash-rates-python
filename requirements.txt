@@ -6,4 +6,3 @@ rq-scheduler
 gunicorn
 python-dotenv
 requests
-urlparse
