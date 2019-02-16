@@ -3,3 +3,4 @@ Flask-RestPlus
 Redis
 rq
 rq-scheduler
+gunicorn
