@@ -1,17 +1,24 @@
 #!flask/bin/python
 import os
 import logging
+import json
 from flask import Flask, jsonify, make_response
 from flask_restplus import Api, Resource
 from pathlib import Path  # python3 only
 from dotenv import load_dotenv
-from connectors.cryptocompare import get_average_price
-from connectors.poloniex import get_dash_poloniex
-from connectors.bitcoinaverage import get_bitcoin_average_dash_btc
+from redis import Redis
+from providers.cryptocompare import get_average_price
+from providers.poloniex import get_dash_poloniex
+from providers.bitcoinaverage import get_bitcoin_average_dash_btc
+from storage_interface import start_data_manager
 
 app = Flask(__name__)
 api = Api(app=app, doc="/docs")
 ns_conf = api.namespace('', description='Rates')
+try:
+    r = Redis(host='localhost', port=6379, decode_responses=True)
+except Exception as e:
+    print(e)
 
 def setup():
     # Environment variable is set on Heroku
@@ -31,7 +38,9 @@ class Rates(Resource):
         Returns the rates for queried currencies
         """
         print(rate)
-        return get_average_price()
+        payload = r.get('cryptocompare.get_average_price')
+        print(payload)
+        return json.dumps(payload)
 
 
 @ns_conf.route("/avg")
@@ -40,7 +49,9 @@ class Avg(Resource):
         """
         Returns the average price of Dash
         """
-        return get_average_price()
+        payload = r.get('cryptocompare.get_average_price')
+        print(payload)
+        return payload
 
 
 @ns_conf.route("/btcaverage")
@@ -49,7 +60,9 @@ class BTCAverage(Resource):
         """
         This is the average DASH price across Binance, Kraken, Poloniex, and Bitfinex
         """
-        return get_bitcoin_average_dash_btc()
+        payload = r.get('bitcoinaverage.get_bitcoin_average_dash_btc')
+        print(payload)
+        return payload
 
 
 @ns_conf.route("/poloniex")
@@ -59,7 +72,9 @@ class Polo(Resource):
         This is an average of the price paid for the last 200 trades on Poloniex
 
         """
-        return get_dash_poloniex()
+        payload = r.get('poloniex.get_dash_poloniex')
+        print(payload)
+        return payload
 
 @app.errorhandler(404)
 def not_found(error):
@@ -72,5 +87,6 @@ if __name__ == "__main__":
 
     if debug:
         logging.basicConfig(level=logging.DEBUG)
-
+    
+    start_data_manager()
     app.run(host='0.0.0.0', port=port_number, debug=debug)
