@@ -5,3 +5,4 @@ rq
 rq-scheduler
 gunicorn
 python-dotenv
+requests
