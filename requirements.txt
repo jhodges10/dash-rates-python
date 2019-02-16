@@ -4,3 +4,4 @@ Redis
 rq
 rq-scheduler
 gunicorn
+python-dotenv
