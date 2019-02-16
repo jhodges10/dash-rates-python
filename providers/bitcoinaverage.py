@@ -4,7 +4,10 @@ import logging
 from redis import Redis
 import json
 
-redis_conn = Redis('localhost', 6379)
+if os.getenv('REDIS_URL'):
+    redis_conn = Redis.from_url(os.getenv('REDIS_URL'), decode_responses=True)
+else:
+    redis_conn = Redis()
 
 def get_bitcoin_average_dash_btc(url):
     response = requests.get(url)

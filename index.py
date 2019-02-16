@@ -16,7 +16,12 @@ app = Flask(__name__)
 api = Api(app=app, doc="/docs")
 ns_conf = api.namespace('', description='Rates')
 try:
-    r = Redis(host='localhost', port=6379, decode_responses=True)
+    if os.getenv('REDIS_URL'):
+        r = Redis.from_url(os.getenv('REDIS_URL'), decode_responses=True)
+    else:
+        r = Redis(decode_responses=True)
+    print("Connection Made")
+
 except Exception as e:
     print(e)
 

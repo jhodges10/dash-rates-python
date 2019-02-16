@@ -6,7 +6,7 @@ from rq.worker import HerokuWorker as Worker
 
 listen = ['high', 'default', 'low']
 
-redis_url = os.getenv('REDISTOGO_URL')
+redis_url = os.getenv('REDIS_URL')
 if not redis_url:
     raise RuntimeError('Set up Redis To Go first.')
 

@@ -42,7 +42,10 @@ def refresh_data():
 def start_data_manager():
     print("Starting BG Workers")
     print("Intitializing Redis Queue")
-    redis_conn = Redis('localhost', 6379)
+    if os.getenv('REDIS_URL'):
+        redis_conn = Redis.from_url(os.getenv('REDIS_URL'), decode_responses=True)
+    else:
+        redis_conn = Redis()
     print("Connection Made")
 
     try:
